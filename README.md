@@ -39,5 +39,18 @@ The benefits become even more apparent, when we have to work with multiple GitHu
 ## Installation
 
 ## Usage
+Firstly, the root directory of the git provider needs to be initialized.  
+The base URL of the git provider will be prompted.
+```
+$> gitclone init
+   git provider base url: 
+   github.com
+   gitclone provider root registered
+$> 
+```
+
+```
+gitclone <relative path>
+```
 
 ### Examples
