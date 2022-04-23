@@ -1,5 +1,9 @@
 name: Rust
 
+strategy:
+  matrix:
+    os: [ubuntu-latest, ]
+
 on:
   push:
     branches: [ master ]
@@ -11,9 +15,7 @@ env:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.node }}
     steps:
     - uses: actions/checkout@v3
     - name: Build
