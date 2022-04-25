@@ -1,7 +1,7 @@
 use std::{process};
 
-#[path = "root_file.rs"] mod root_file;
-#[path = "util.rs"] mod util;
+use crate::root_file;
+use crate::util;
 use log::{debug};
 
 pub fn do_init_action() {

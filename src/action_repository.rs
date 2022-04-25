@@ -1,4 +1,4 @@
-#[path = "root_file.rs"] mod root_file;
+use super::root_file;
 use log::{debug, info};
 use std::process::Command;
 use std::process;

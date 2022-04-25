@@ -3,7 +3,6 @@ extern crate linked_hash_map;
 use lazy_static::lazy_static;
 use std::fmt;
 
-#[path = "util.rs"] mod util;
 use std::path::{PathBuf};
 use std::env;
 use yaml_rust::{Yaml, YamlLoader, YamlEmitter};
@@ -15,7 +14,6 @@ use log::{info, debug};
 use regex::Regex;
 
 const GITCLONE_ROOT_FILE_NAME: &str = ".gitclone_root.yml";
-
 
 pub fn get_pwd_file_path() -> PathBuf {
   let current_dir = env::current_dir().unwrap();
