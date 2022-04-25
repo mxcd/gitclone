@@ -96,10 +96,18 @@ pub fn clone(relative_path_string: String) {
   debug!("url is '{}'", url);
   println!("Cloning '{}'", safe_url);
   let output = Command::new("git").arg("clone").arg(&url).arg(relative_path.to_str().unwrap()).output().expect("Error: git clone failed");
-  debug!("status: {}", output.status.code().unwrap());
+  let status_code = output.status.code().unwrap();
+  debug!("status: {}", status_code);
   debug!("stdout: {}", String::from_utf8_lossy(&output.stdout));
   debug!("stderr: {}", String::from_utf8_lossy(&output.stderr));
   let message = String::from_utf8_lossy(&output.stderr);
+
+  if status_code == 0 {
+    debug!("Cloning successful.");
+    root_file.add_repository(absolute_repository_path.to_str().unwrap());
+    root_file.write();
+  }
+
   println!("{}", message);
-  process::exit(output.status.code().unwrap());
+  process::exit(status_code);
 }

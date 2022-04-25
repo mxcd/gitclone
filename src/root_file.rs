@@ -157,6 +157,10 @@ impl RootFile {
     &self.git_provider_connection_mode
   }
 
+  pub fn add_repository(&mut self, repository: &str) {
+    self.repositories.push(repository.to_string());
+  }
+
   // write .gitclone_root.yml file
   pub fn write(&mut self) {
     info!("Writing .gitclone_root.yml file");
