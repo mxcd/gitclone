@@ -2,7 +2,11 @@ extern crate argparse;
 
 use argparse::{ArgumentParser, StoreTrue, Store};
 use std::process;
+use simple_logger;
+use log;
+use log::{info};
 use gitclone::action_init::do_init_action;
+use gitclone::action_repository::clone;
 
 fn main() {
     let mut verbose = false;
@@ -15,17 +19,25 @@ fn main() {
         argument_parser.parse_args_or_exit();
     }
 
+    if verbose {
+        simple_logger::init_with_level(log::Level::Debug).expect("Error initializing logger");
+    }
+    else {
+        simple_logger::init_with_level(log::Level::Warn).expect("Error initializing logger");
+    }
+
     if action == "" {
         println!("No action given. Pass '-h' for help.");
         process::exit(1);
     }
     match action.as_str() {
         "init" => {
-            if verbose { println!("Performing init action")}
-            do_init_action(verbose);
+            info!("Performing init action");
+            do_init_action();
         },
         _ => {
-            if verbose { println!("Interpreting '{}' as relative repository path", action)}
+            info!("Interpreting '{}' as relative repository path", action);
+            clone(action);
         }
     }
 }
