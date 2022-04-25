@@ -12,15 +12,21 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             artifact_name: gitclone
-            asset_name: gitclone-linux-amd64
+            asset_name: gitclone-linux-amd64-20.04
+          - os: ubuntu-18.04
+            artifact_name: gitclone
+            asset_name: gitclone-linux-amd64-18.04
           - os: windows-latest
             artifact_name: gitclone.exe
             asset_name: gitclone-windows-amd64.exe
-          - os: macos-latest
+          - os: macos-11
             artifact_name: gitclone
-            asset_name: gitclone-macos-amd64
+            asset_name: gitclone-macos-11-amd64
+          - os: macos-10.15
+            artifact_name: gitclone
+            asset_name: gitclone-macos-10.15-amd64
 
     steps:
     - uses: actions/checkout@v2
