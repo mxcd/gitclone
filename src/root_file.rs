@@ -12,6 +12,7 @@ use std::io::prelude::*;
 use std::fs::File;
 use log::{info, debug};
 use regex::Regex;
+use pathdiff::diff_paths;
 
 const GITCLONE_ROOT_FILE_NAME: &str = ".gitclone_root.yml";
 
@@ -29,12 +30,27 @@ pub fn exists_in_pwd() -> bool {
   file_path.exists()
 }
 
-pub fn find_root_file_path() -> Result<PathBuf, bool> {
-  if exists_in_pwd() {
-    return Ok(get_pwd_file_path());
-  }
-  else {
-    return Err(false);
+pub fn find_root_file_path() -> Option<PathBuf> { 
+  debug!("Searching for root file...");
+  let mut current_dir: PathBuf = env::current_dir().unwrap();
+  loop {
+    let gitclone_root_file_path = current_dir.as_path().join(GITCLONE_ROOT_FILE_NAME);
+    debug!("Searching in '{}'", current_dir.display());
+    if gitclone_root_file_path.exists() {
+      debug!("found");
+      return Some(gitclone_root_file_path);
+    }
+    else {
+      debug!("Searching in parent directory...");
+      let current_dir_option = current_dir.parent();
+      if current_dir_option.is_none() {
+        debug!("Parent directory not accessible");
+        return None;
+      }
+      else {
+        current_dir = current_dir_option.unwrap().to_path_buf();
+      }
+    }
   }
 }
 
@@ -204,5 +220,13 @@ impl RootFile {
         self.repositories.push(repository.as_str().unwrap().to_string());
       }
     }
+  }
+
+  pub fn get_path_diff(&self) -> PathBuf{
+    // calculate the difference between the current working directory and the .gitclone_root.yml file
+    let current_working_directory = std::env::current_dir().unwrap();
+    let gitclone_root_dir = self.get_file_path().parent().unwrap();
+    let diff = diff_paths(&current_working_directory, gitclone_root_dir).unwrap();
+    return diff;
   }
 }
