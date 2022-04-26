@@ -44,11 +44,14 @@ pub fn clone(relative_path_string: String) {
   let relative_path_components = relative_path.components().collect::<Vec<_>>();
   let mut current_dir = std::env::current_dir().unwrap();
 
+  let mut created_directories: Vec<PathBuf> = vec![];
+
   for relative_path_component in relative_path_components {
     let create_dir = current_dir.join(relative_path_component);
     if !create_dir.exists() {
       debug!("creating directory '{}'", create_dir.to_str().unwrap());
       std::fs::create_dir_all(&create_dir).unwrap();
+      created_directories.push(create_dir.clone());
     }
     current_dir = create_dir;
   }
@@ -106,6 +109,16 @@ pub fn clone(relative_path_string: String) {
     debug!("Cloning successful.");
     root_file.add_repository(absolute_repository_path.to_str().unwrap());
     root_file.write();
+  }
+  else {
+    debug!("Cloning failed.");
+    debug!("Deleting created directories...");
+    for created_directory in created_directories {
+      if created_directory.exists() {
+        debug!("Deleting directory '{}'", created_directory.to_str().unwrap());
+        std::fs::remove_dir_all(&created_directory).unwrap();
+      }
+    }
   }
 
   println!("{}", message);
