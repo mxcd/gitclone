@@ -14,7 +14,7 @@ jobs:
         include:
           - os: ubuntu-20.04
             artifact_name: gitclone
-            asset_name: gitclone-linux-amd64-20.04
+            asset_name: gitclone-linux-amd64
           - os: ubuntu-18.04
             artifact_name: gitclone
             asset_name: gitclone-linux-amd64-18.04
